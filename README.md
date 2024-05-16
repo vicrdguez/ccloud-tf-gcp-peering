@@ -1,3 +1,34 @@
+## Running with Nix
+This repo is built with Nix. If you are a nix user you don't need to have any extra tool (such as
+terraform or gcloud) installed.
+
+First run the following to enter the devshell with all dependencies
+
+```bash
+nix develop
+```
+
+From here you can use the project as usual, using the terraform commands. However the build comes
+with some nix automations to run all with Nix:
+
+```bash
+# To deploy the Pre-requisites (GCP resources) if needed. If you already have them provisioned, 
+# you can skip this ones
+nix run .#pre-plan
+nix run .#pre-apply
+
+# Deploy a Confluent Cloud cluster with VPC peering
+nix run .#plan
+nix run .#apply
+```
+
+The apply commands run `terraform plan` if there is no `tfplan` file found, so you can just run the
+_apply_ variants if you want.
+
+If you don't have nix and you have `terraform` and `gcloud` installed, just use as you are used to,
+the `gcp/` folder contains the needed GCP resources (pre-requisites) and `confluent/` contains the
+actual code to deploy a Confluent Cloud cluster with VPC Peering
+
 ## Requirements
 
 The following requirements are needed by this module:
